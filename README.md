@@ -1,15 +1,12 @@
-# Spoofy-Mac
-It is a tool that can change mac address of any  linux machine as well as it will also check whether the mac is changed or not.
-
-
-
+# Network-Thief
+This tool can scan the whole network and show the nice result of all the connected clients in that network. 
 Installation--------------------------------------------------------------------------------------------------------------
 
-git clone https://github.com/Dineshboss/spoofy-mac.git
+git clone https://github.com/Dineshboss/network-thief.git
 
-cd spoofy-mac
+cd network-thief
 
-python setup.py -i interface -m new_mac_address
+python setup.py -r ip_range
 
 
 
