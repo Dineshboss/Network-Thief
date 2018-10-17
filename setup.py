@@ -1,33 +1,28 @@
-#! /usr/bin/env python
+#! usr/bin/env python
+import argparse
 import scapy.all as scapy
-import optparse
-
 def argument():
-    parser=optparse.OptionParser()
-    parser.add_option("-r",dest="range", help="Range for scanning the network")
-    (options,arguments)=parser.parse_args()
+    parser=argparse.ArgumentParser()
+    parser.add_argument("-r",dest="range",help="IP range to scan the Network")
+    options=parser.parse_args()
+    if not options.range:
+        parser.error("Please specify the ip range")
     return(options)
+def get_packet(ip):
+    scapy_packet = scapy.ARP(pdst=ip)
+    broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
+    packet_final = broadcast / scapy_packet
+    answered = scapy.srp(packet_final, timeout=1)[0]
+    print("IP" + "\t\t" + " Mac-Address")
+    return(answered)
 
-def scan(ip):
-    arp_request = scapy.ARP(pdst=ip)
-    broadcast=scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
-    arp_request_broadcast=broadcast/arp_request
-    answered=scapy.srp(arp_request_broadcast,timeout=1, verbose=False)[0]
-    arp_list=[]
-    for element in answered:
-        arp_dict={"iP":element[1].psrc, "mac":element[1].hwsrc}
-        arp_list.append(arp_dict)
-    return(arp_list)
-
-def client(scan_result_final):
-    print("IP" + "\t\t\t\t" + "Mac" + "\n" + "----------------------------------")
-    for result_arp in scan_result_final:
-             print(result_arp["iP"] + "\t\t" +result_arp["mac"])
+def capture(ip):
+   answered=get_packet(ip)
+   ip_dict={}
+   for answer in answered:
+       ip_dict[answer[1].psrc]= answer[1].src
+   for key in ip_dict.keys():
+        print(key + "\t" + ip_dict[key])
 
 options=argument()
-scan_result=scan(options.range)
-client(scan_result)
-
-
-
-
+capture(options.range)
