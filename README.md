@@ -8,7 +8,7 @@ cd network-thief
 
 python setup.py -r ip_range  or python3 setup.py -r ip_range (compatible with both python 2 and python 3)
 
-![]/images/demo.png
+![](/images/demo.png)
 
 
 
